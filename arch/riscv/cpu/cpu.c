@@ -80,11 +80,13 @@ int arch_cpu_init_dm(void)
 	if (ret)
 		return ret;
 
+#ifndef CONFIG_TARGET_VIPCOM_ZSIPOS // adi: does not work (problem with our dts)
 	/* Enable FPU */
 	if (supports_extension('d') || supports_extension('f')) {
 		csr_set(MODE_PREFIX(status), MSTATUS_FS);
 		csr_write(CSR_FCSR, 0);
 	}
+#endif
 
 	if (CONFIG_IS_ENABLED(RISCV_MMODE)) {
 		/*

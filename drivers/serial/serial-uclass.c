@@ -106,6 +106,14 @@ static void serial_find_console_or_panic(void)
 		}
 	}
 	if (!SPL_BUILD || !CONFIG_IS_ENABLED(OF_CONTROL) || !blob) {
+
+#ifdef CONFIG_TARGET_VIPCOM_ZSIPOS // adi: normal code does not work?? sorry, i do not have any debugger at the moment ...
+		if (!uclass_first_device(UCLASS_SERIAL, &dev)) {
+			gd->cur_serial_dev = dev;
+			return;
+		}
+#endif
+
 		/*
 		 * Try to use CONFIG_CONS_INDEX if available (it is numbered
 		 * from 1!).
@@ -119,7 +127,6 @@ static void serial_find_console_or_panic(void)
 #else
 #define INDEX 0
 #endif
-
 #ifdef CONFIG_SERIAL_SEARCH_ALL
 		if (!uclass_get_device_by_seq(UCLASS_SERIAL, INDEX, &dev) ||
 		    !uclass_get_device(UCLASS_SERIAL, INDEX, &dev)) {
@@ -147,9 +154,9 @@ static void serial_find_console_or_panic(void)
 			return;
 		}
 #endif
-
 #undef INDEX
 	}
+
 
 #ifdef CONFIG_REQUIRE_SERIAL_CONSOLE
 	panic_str("No serial driver found");

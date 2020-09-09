@@ -16,7 +16,6 @@
 
 int board_init(void)
 {
-	printf("board init\n");
 	return 0;
 }
 

@@ -829,6 +829,12 @@ config XEN_SERIAL
 	  If built without DM support, then requires Xen
 	  to be built with CONFIG_VERBOSE_DEBUG.
 
+config LITEX_SERIAL
+	bool "Litex UART support"
+	depends on DM_SERIAL
+	help
+	  This driver supports the LiteX UART. If unsure say N.
+
 choice
 	prompt "Console port"
 	default 8xx_CONS_SMC1

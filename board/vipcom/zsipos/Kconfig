@@ -30,8 +30,8 @@ config BOARD_SPECIFIC_OPTIONS # dummy
 	def_bool y
 	select GENERIC_RISCV
 	select SUPPORT_SPL
-	imply SYS_NS16550
-#	imply SIFIVE_SERIAL
+#	imply SYS_NS16550
+	imply LITEX_SERIAL
 	imply CMD_PING
 	imply CMD_FS_GENERIC
 	imply DOS_PARTITION
