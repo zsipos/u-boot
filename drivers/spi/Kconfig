@@ -430,6 +430,12 @@ config ZYNQMP_GQSPI
 	  This option is used to enable ZynqMP QSPI controller driver which
 	  is used to communicate with qspi flash devices.
 
+config ZSIPOS_SPI
+	bool "Configure zsipos SPI"
+	help
+	  This option is used to enable zsipos SPI controller driver which
+	  is used to communicate with spi devices.
+
 endif # if DM_SPI
 
 config FSL_ESPI

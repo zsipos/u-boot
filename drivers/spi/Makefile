@@ -64,3 +64,5 @@ obj-$(CONFIG_XILINX_SPI) += xilinx_spi.o
 obj-$(CONFIG_ZYNQ_SPI) += zynq_spi.o
 obj-$(CONFIG_ZYNQ_QSPI) += zynq_qspi.o
 obj-$(CONFIG_ZYNQMP_GQSPI) += zynqmp_gqspi.o
+obj-$(CONFIG_ZSIPOS_SPI) += spi-zsipos.o
+
