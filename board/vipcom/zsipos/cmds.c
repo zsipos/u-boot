@@ -1,8 +1,4 @@
 // SPDX-License-Identifier: GPL-2.0+
-/*
- * Copyright 2000-2009
- * Wolfgang Denk, DENX Software Engineering, wd@denx.de.
- */
 
 #include <common.h>
 #include <command.h>
@@ -27,7 +23,6 @@ static int get_partition_version(int partition)
 	char *valstr = (char*)MEMBASE, *endp;
 	int   ret = -1;
 
-	printf("\nzsipos boot...\n\n");
 	printf("loading %s from partition %d\n", VERSION_FILE, partition);
 
 	sprintf(cmd, "load mmc 0:%d %x %s", partition, MEMBASE, VERSION_FILE);
@@ -53,6 +48,8 @@ static int do_zsiposboot(struct cmd_tbl *cmdtp, int flag, int argc,
 	char cmd[256];
 	int  vers1, vers2, lower, higher, selected;
 
+	printf("\nzsipos boot ...\n\n");
+
 	vers1 = get_partition_version(1);
 	vers2 = get_partition_version(2);
 
@@ -73,7 +70,7 @@ static int do_zsiposboot(struct cmd_tbl *cmdtp, int flag, int argc,
 
 	sprintf(cmd, "fdt addr ${fdtcontroladdr}\nfdt set /chosen partition <%d>", selected);
 	run_command(cmd, CMD_FLAG_ENV);
-	printf("load kernel image ..\n");
+	printf("load kernel image ...\n");
 	sprintf(cmd, "load mmc 0:%d 0x%x %s\n", selected, MEMBASE, KERNEL_FILE);
 	run_command(cmd, CMD_FLAG_ENV);
 	sprintf(cmd, "bootm 0x%x - ${fdtcontroladdr}", MEMBASE);
