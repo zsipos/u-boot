@@ -30,8 +30,10 @@ static int get_partition_version(int partition)
 	printf("loading %s from partition %d\n", VERSION_FILE, partition);
 
 	sprintf(cmd, "load mmc 0:%d %x %s", partition, MEMBASE, VERSION_FILE);
-	if (run_command(cmd, CMD_FLAG_ENV))
+	if (run_command(cmd, CMD_FLAG_ENV)) {
+		printf("\n");
 		return -1;
+	}
 
 	valstr[env_get_hex("filesize", MEMBASE)] = 0;
 
@@ -68,7 +70,7 @@ static int do_zsiposboot(struct cmd_tbl *cmdtp, int flag, int argc,
 
 	printf("select partition %d\n", selected);
 
-	sprintf(cmd, "fdt addr ${fdtcontroladdr}\nfdt set /chosen partition %d", selected);
+	sprintf(cmd, "fdt addr ${fdtcontroladdr}\nfdt set /chosen partition <%d>", selected);
 	run_command(cmd, CMD_FLAG_ENV);
 	printf("load kernel image ..\n");
 	sprintf(cmd, "load mmc 0:%d 0x%x %s\n", selected, MEMBASE, KERNEL_FILE);
