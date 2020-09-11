@@ -27,6 +27,7 @@ static int get_partition_version(int partition)
 	char *valstr = (char*)MEMBASE, *endp;
 	int   ret = -1;
 
+	printf("\nzsipos boot...\n\n");
 	printf("loading %s from partition %d\n", VERSION_FILE, partition);
 
 	sprintf(cmd, "load mmc 0:%d %x %s", partition, MEMBASE, VERSION_FILE);
