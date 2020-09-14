@@ -7,13 +7,20 @@
 #define KERNEL_FILE  "image"
 #define VERSION_FILE "/root/version"
 
-static int is_ts_pressed()
+static int is_ts_pressed(void)
 {
-	int ret = 0;
+	u32 *gpioaddr;
+	int  ret;
+
+	run_command("fdt get addr tsgpio /soc/gpio@1 reg", CMD_FLAG_ENV);
+	gpioaddr = (void*)env_get_hex("tsgpio", MEMBASE);
+	gpioaddr = (void*)(u64)swab32(*gpioaddr);
+
+	ret = *gpioaddr & 1 ? 0 : 1;
 
 	printf("touch screen is");
 	if (!ret) printf(" not");
-	printf(" pressed\n");
+	printf(" pressed\n\n");
 	return ret;
 }
 
@@ -50,6 +57,9 @@ static int do_zsiposboot(struct cmd_tbl *cmdtp, int flag, int argc,
 
 	printf("\nzsipos boot ...\n\n");
 
+	// select boot fdt
+	run_command("fdt addr ${fdtcontroladdr}", CMD_FLAG_ENV);
+
 	vers1 = get_partition_version(1);
 	vers2 = get_partition_version(2);
 
@@ -68,9 +78,9 @@ static int do_zsiposboot(struct cmd_tbl *cmdtp, int flag, int argc,
 
 	printf("select partition %d\n", selected);
 
-	sprintf(cmd, "fdt addr ${fdtcontroladdr}\nfdt set /chosen partition <%d>", selected);
-	run_command(cmd, CMD_FLAG_ENV);
 	printf("load kernel image ...\n");
+	sprintf(cmd, "fdt set /chosen partition <%d>", selected);
+	run_command(cmd, CMD_FLAG_ENV);
 	sprintf(cmd, "load mmc 0:%d 0x%x %s\n", selected, MEMBASE, KERNEL_FILE);
 	run_command(cmd, CMD_FLAG_ENV);
 	sprintf(cmd, "bootm 0x%x - ${fdtcontroladdr}", MEMBASE);
