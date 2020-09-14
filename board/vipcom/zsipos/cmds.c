@@ -5,7 +5,7 @@
 
 #define MEMBASE      0x90000000
 #define KERNEL_FILE  "sel4+linux"
-#define VERSION_FILE "/root/version"
+#define VERSION_FILE "/versioncount"
 
 static int is_ts_pressed(void)
 {
