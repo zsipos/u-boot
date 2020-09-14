@@ -4,7 +4,7 @@
 #include <command.h>
 
 #define MEMBASE      0x90000000
-#define KERNEL_FILE  "image"
+#define KERNEL_FILE  "sel4+linux"
 #define VERSION_FILE "/root/version"
 
 static int is_ts_pressed(void)
