@@ -91,6 +91,6 @@ static int do_zsiposboot(struct cmd_tbl *cmdtp, int flag, int argc,
 
 U_BOOT_CMD(
 	zsiposboot,	1,	1,	do_zsiposboot,
-	"boot zsiposboot",
+	"boot zsipos",
 	""
 );
