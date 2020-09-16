@@ -86,9 +86,12 @@ static int do_zsiposboot(struct cmd_tbl *cmdtp, int flag, int argc,
 	sprintf(cmd, "fdt set /chosen zsipos,boot-version %d", ZSIPOS_BOOT_VERSION);
 	run_command(cmd, CMD_FLAG_ENV);
 	sprintf(cmd, "load mmc 0:%d 0x%x %s\n", selected, MEMBASE, KERNEL_FILE);
-	run_command(cmd, CMD_FLAG_ENV);
-	sprintf(cmd, "bootm 0x%x - ${fdtcontroladdr}", MEMBASE);
-	run_command(cmd, CMD_FLAG_ENV);
+	if (run_command(cmd, CMD_FLAG_ENV)) {
+		fprintf(stderr, "can not load kernel!\n");
+	} else {
+		sprintf(cmd, "bootm 0x%x - ${fdtcontroladdr}", MEMBASE);
+		run_command(cmd, CMD_FLAG_ENV);
+	}
 
 	return 0;
 }
