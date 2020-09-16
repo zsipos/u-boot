@@ -3,6 +3,8 @@
 #include <common.h>
 #include <command.h>
 
+#define ZSIPOS_BOOT_VERSION	1
+
 #define MEMBASE      0x90000000
 #define KERNEL_FILE  "sel4+linux"
 #define VERSION_FILE "/versioncount"
@@ -55,7 +57,7 @@ static int do_zsiposboot(struct cmd_tbl *cmdtp, int flag, int argc,
 	char cmd[256];
 	int  vers1, vers2, lower, higher, selected;
 
-	printf("\nzsipos boot ...\n\n");
+	printf("\nzsipos boot version %d ...\n\n", ZSIPOS_BOOT_VERSION);
 
 	// select boot fdt
 	run_command("fdt addr ${fdtcontroladdr}", CMD_FLAG_ENV);
@@ -79,7 +81,9 @@ static int do_zsiposboot(struct cmd_tbl *cmdtp, int flag, int argc,
 	printf("select partition %d\n", selected);
 
 	printf("load kernel image ...\n");
-	sprintf(cmd, "fdt set /chosen partition <%d>", selected);
+	sprintf(cmd, "fdt set /chosen zsipos,partition %d", selected);
+	run_command(cmd, CMD_FLAG_ENV);
+	sprintf(cmd, "fdt set /chosen zsipos,boot-version %d", ZSIPOS_BOOT_VERSION);
 	run_command(cmd, CMD_FLAG_ENV);
 	sprintf(cmd, "load mmc 0:%d 0x%x %s\n", selected, MEMBASE, KERNEL_FILE);
 	run_command(cmd, CMD_FLAG_ENV);
