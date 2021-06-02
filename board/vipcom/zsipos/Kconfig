@@ -31,14 +31,16 @@ config BOARD_SPECIFIC_OPTIONS # dummy
 	select GENERIC_RISCV
 	select SUPPORT_SPL
 #	unselect NET
+#	imply CMD_PING
+	imply DISPLAY_BOARDINFO_LATE
 	imply SPI
+	imply SPI_FLASH
+	imply SPI_FLASH_SPANSION
 	imply MMC
 	imply MMC_SPI
 	imply CMD_MMC
 	imply ZSIPOS_SPI
-#	imply SYS_NS16550
 	imply LITEX_SERIAL
-#	imply CMD_PING
 	imply CMD_FS_GENERIC
 	imply DOS_PARTITION
 	imply EFI_PARTITION
