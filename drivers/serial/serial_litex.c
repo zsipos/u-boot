@@ -33,11 +33,6 @@ static inline void csr_writeb(unsigned char val, void *addr, int offset)
 	*(volatile unsigned int*)addr = val;
 }
 
-void litexdbg(int x)
-{
-	csr_writeb(x, 0x1200e000, LITEX_GPIO0_OUT_REG);
-}
-
 static int litex_serial_setbrg(struct udevice *dev, int baudrate)
 {
 	// uart is fixed, nothing to do
