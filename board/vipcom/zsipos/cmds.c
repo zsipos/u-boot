@@ -14,6 +14,7 @@
 #define MEMBASE            0x90000000
 #define KERNEL_FILE        "sel4+linux"
 #define VERSION_FILE       "/versioncount"
+#define ROTATE_FILE        "/rotate"
 #define FIRMWARE_VERS_FILE "/img_vers"
 #define FIRMWARE_FPGA_FILE "/img_fpga"
 #define FIRMWARE_BOOT_FILE "/img_boot"
@@ -171,10 +172,18 @@ static void check_firmware_version(int partition)
 	}
 }
 
+static void check_rotation(int partition)
+{
+	if (get_int_from_file(partition, ROTATE_FILE) > 0) {
+		printf("display is upside down.\n\n");
+		run_command("fdt set /soc/spi@1/ws35a_display@0 rotate <270>", CMD_FLAG_ENV);
+	}
+}
+
 static int do_zsiposboot(struct cmd_tbl *cmdtp, int flag, int argc,
 		   char *const argv[])
 {
-	char cmd[256];
+	cmdt cmd;
 	int  vers1, vers2, lower, higher, selected;
 
 	printf("\nzsipos boot version %d ...\n\n", ZSIPOS_BOOT_VERSION);
@@ -201,6 +210,7 @@ static int do_zsiposboot(struct cmd_tbl *cmdtp, int flag, int argc,
 	printf("select partition %d\n", selected);
 
 	check_firmware_version(selected);
+	check_rotation(selected);
 
 	printf("load kernel image ...\n");
 	sprintf(cmd, "fdt set /chosen zsipos,partition %d", selected);
